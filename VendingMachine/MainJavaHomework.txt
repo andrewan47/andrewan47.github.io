@@ -1,0 +1,78 @@
+import java.util.*;
+import java.io.*;
+import java.text.DecimalFormat;
+
+public class Main {
+
+	public static void main(String[] args) throws IOException {
+		DecimalFormat decimal = new DecimalFormat("$#,##0.00");
+		double withdrawal, deposit, interest;
+		
+		SavingsAccount account = new SavingsAccount();
+		account.BankAccount(500.0, 4.75);
+		
+		System.out.println("The starting balance was: " + decimal.format(account.GetBalance()));
+		deposit = add(account);
+		withdrawal = subtract(account);
+		interest = percent(account);
+		System.out.println("The ending balance of the account is: " + decimal.format(account.GetBalance()));
+		System.out.println("The total amount of deposits was: " + decimal.format(deposit));
+		System.out.println("The total amount of withdrawals was: " + decimal.format(withdrawal));
+		System.out.println("The total interest earned was: " + decimal.format(interest));
+	}
+
+	public static double add(SavingsAccount account) throws IOException{
+		File file;
+		double total = 0.0;
+		double deposit = 0.0;
+		
+		file = new File("Deposits.txt");
+		
+		Scanner inputFile = new Scanner(file);
+		while (inputFile.hasNext()) {
+			double number = inputFile.nextDouble();
+			total += number;
+		}
+		
+		deposit = total;
+		total += account.GetBalance();
+		account.SetBalance(total);
+		
+		inputFile.close();
+		
+		return deposit;
+	}
+	
+	public static double subtract(SavingsAccount account) throws IOException{
+		File file;
+		double total = 0.0;
+		double withdrawal = 0.0;
+		
+		file = new File("Withdrawals.txt");
+		
+		Scanner inputFile = new Scanner(file);
+		while (inputFile.hasNext()) {
+			double number = inputFile.nextDouble();
+			total -= number;
+			withdrawal += number;
+		}
+		
+		total += account.GetBalance();
+		account.SetBalance(total);
+		
+		inputFile.close();
+		return withdrawal;
+	}
+	
+	public static double percent(SavingsAccount account) {
+		double interest;
+		double total;
+		
+		interest = account.GetRate() / 100 / 12;
+		interest *= account.GetBalance();
+		total = account.GetBalance() + interest;
+		account.SetBalance(total);
+		
+		return interest;
+	}
+}

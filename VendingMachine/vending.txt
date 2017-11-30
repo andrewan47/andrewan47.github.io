@@ -1,0 +1,8 @@
+Cola
+1.25
+Chips
+0.75
+Water
+0.80
+Trail Mix
+0.60

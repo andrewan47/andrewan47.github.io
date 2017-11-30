@@ -1,0 +1,9 @@
+c:\users\andrew\documents\visual studio 2015\Projects\VendingMachine\bin\Debug\VendingMachine.exe.config
+c:\users\andrew\documents\visual studio 2015\Projects\VendingMachine\bin\Debug\VendingMachine.exe
+c:\users\andrew\documents\visual studio 2015\Projects\VendingMachine\bin\Debug\VendingMachine.pdb
+c:\users\andrew\documents\visual studio 2015\Projects\VendingMachine\obj\Debug\VendingMachine.csprojResolveAssemblyReference.cache
+c:\users\andrew\documents\visual studio 2015\Projects\VendingMachine\obj\Debug\VendingMachine.Properties.Resources.resources
+c:\users\andrew\documents\visual studio 2015\Projects\VendingMachine\obj\Debug\VendingMachine.csproj.GenerateResource.Cache
+c:\users\andrew\documents\visual studio 2015\Projects\VendingMachine\obj\Debug\VendingMachine.exe
+c:\users\andrew\documents\visual studio 2015\Projects\VendingMachine\obj\Debug\VendingMachine.pdb
+c:\users\andrew\documents\visual studio 2015\Projects\VendingMachine\obj\Debug\VendingMachine.VendingChoice.resources
