@@ -1,0 +1,58 @@
+Chicago
+2
+New Orleans
+926
+New York
+788
+Las Vegas
+2
+New Orleans
+1730
+Los Angeles
+270
+Los Angeles
+3
+New York
+2789
+Las Vegas
+270
+Seattle
+1135
+New Orleans
+3
+Chicago
+926
+New York
+1304
+Los Angeles
+1892
+New York
+2
+Los Angeles
+2789
+Philadelphia
+96
+Philadelphia
+3
+Chicago
+758
+New York
+96
+Toronto
+498
+Seattle
+1
+Vancouver
+142
+Toronto
+2
+New York
+491
+Vancouver
+2723
+Vancouver
+2
+Seattle
+142
+Toronto
+2723
