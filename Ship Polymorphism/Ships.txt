@@ -1,0 +1,13 @@
+CruiseShip,Aegean Spirit,2003,4500
+Ship,Classica,1990
+CargoShip,Edith Maersk,2007,170794
+CargoShip,Emma Maersk,2006,156907
+CruiseShip,Enchanted Capri,1970,7000
+CargoShip,Estelle Maersk,2006,151687
+CruiseShip,Explorer of the Seas,2001,9500
+Ship,MV Delight,1985
+CargoShip,Ocean Glory,2006,161788
+CruiseShip,Our Lady,1960,3500
+Ship,Provence,1995
+Ship,SS Desabla,1913
+CruiseShip,Symphony,2001,10000
