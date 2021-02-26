@@ -6,26 +6,16 @@ public class Universal : MonoBehaviour
 {
     public class Stats
     {
-        public int health;
-        public int stun;
-        public int meter;
-        public int speed;
-        public int backSpeed;
-        public int jumpSpeed;
-        public float recovery;
-        public float start;
-        public float active;
-        public float reset;
-        public float jumpRecovery;
-        public bool isJumping;
-        public bool isAttacking;
-        public bool isCrouching;
-        public bool isBlocking;
+        private int health;
+        private int stun;
+        private int meter;
+        private int speed;
+        private int backSpeed;
+        private int jumpSpeed;
+        private bool isCrouching;
+        private bool isBlocking;
 
-        //Display for testing purposes
-        public bool isSpecialAttack;
-
-        public Stats(int hp, int stn, int mtr, int spd, int bspd, int jspd, float jrcv)
+        public Stats(int hp, int stn, int mtr, int spd, int bspd, int jspd)
         {
             health = hp;
             stun = stn;
@@ -33,38 +23,30 @@ public class Universal : MonoBehaviour
             speed = spd;
             backSpeed = bspd;
             jumpSpeed = jspd;
-            jumpRecovery = jrcv;
+            isCrouching = false;
+            isBlocking = false;
         }
 
         public Stats()
         {
             health = 1;
-            stun = 0;
+            stun = 1;
             meter = 1;
             speed = 1;
             backSpeed = 1;
             jumpSpeed = 1;
-            recovery = 0f;
-            start = 0f;
-            active = 0f;
-            reset = 0f;
-            jumpRecovery = 0f;
-            isJumping = false;
-            isAttacking = false;
             isCrouching = false;
             isBlocking = false;
-
-            isSpecialAttack = false;
         }
 
-        public void setJumping(bool jump)
+        public void setStun(int stn)
         {
-            isJumping = jump;
+            stun = stn;
         }
 
-        public void setAttacking(bool attack)
+        public void setMeter(int mtr)
         {
-            isAttacking = attack;
+            meter = mtr;
         }
 
         public void setCrouching(bool crouch)
@@ -72,34 +54,24 @@ public class Universal : MonoBehaviour
             isCrouching = crouch;
         }
 
-        public void setBlock(bool block)
+        public void setBlocking(bool block)
         {
             isBlocking = block;
         }
 
-        public void setRecovery(float rcv)
+        public int getHP()
         {
-            recovery = rcv;
+            return health;
         }
 
-        public void setStart(float str)
+        public int getStun()
         {
-            start = str;
+            return stun;
         }
 
-        public void setActive(float act)
+        public int getMeter()
         {
-            active = act;
-        }
-
-        public void setReset(float res)
-        {
-            reset = res;
-        }
-
-        public float getRecovery()
-        {
-            return recovery;
+            return meter;
         }
 
         public int getSpeed()
@@ -117,23 +89,33 @@ public class Universal : MonoBehaviour
                 return speed;
             }
         }
+
+        public int getJumpSpeed()
+        {
+            return jumpSpeed;
+        }
+
+        public bool getBlock()
+        {
+            return isBlocking;
+        }
+
+        public bool getCrouching()
+        {
+            return isCrouching;
+        }
     }
 
     public class Jab
     {
-        public int damage;
-        public int chip;
-        public int stunDamage;
-        public int counterDamage;
-        public int counterStun;
-        public int meterGain;
-        public float startUp;
-        public float active;
-        public float recovery;
-        public float hitFrames;
-        public float blockFrames;
+        private int damage;
+        private int chip;
+        private int stunDamage;
+        private int counterDamage;
+        private int counterStun;
+        private int meterGain;
 
-        public Jab(int dmg, int ch, int sdmg, int cdmg, int cstn, int mtrg, float su, float act, float rcv, float onh, float onb)
+        public Jab(int dmg, int ch, int sdmg, int cdmg, int cstn, int mtrg)
         {
             damage = dmg;
             chip = ch;
@@ -141,77 +123,16 @@ public class Universal : MonoBehaviour
             counterDamage = cdmg;
             counterStun = cstn;
             meterGain = mtrg;
-            startUp = su;
-            active = act;
-            recovery = rcv;
-            hitFrames = onh;
-            blockFrames = onb;
         }
 
         public Jab()
         {
             damage = 1;
-            chip = 0;
+            chip = 1;
             stunDamage = 1;
             counterDamage = 1;
             counterStun = 1;
             meterGain = 1;
-            startUp = 1.0f;
-            active = 1.0f;
-            recovery = 1.0f;
-            hitFrames = 1.0f;
-            blockFrames = 1.0f;
         }
     }
-
-    public class Projectile
-    {
-        public int damage;
-        public int speed;
-        public int chip;
-        public int stunDamage;
-        public int counterDamage;
-        public int counterStun;
-        public int meterGain;
-        public float startUp;
-        public float active;
-        public float recovery;
-        public float hitFrames;
-        public float blockFrames;
-
-        public Projectile(int dmg, int spd, int ch, int sdmg, int cdmg, int cstn, int mtrg, float su, float act, float rcv, float onh, float onb)
-        {
-            damage = dmg;
-            speed = spd;
-            chip = ch;
-            stunDamage = sdmg;
-            counterDamage = cdmg;
-            counterStun = cstn;
-            meterGain = mtrg;
-            startUp = su;
-            active = act;
-            recovery = rcv;
-            hitFrames = onh;
-            blockFrames = onb;
-        }
-
-        public Projectile()
-        {
-            damage = 1;
-            speed = 1;
-            chip = 0;
-            stunDamage = 1;
-            counterDamage = 1;
-            counterStun = 1;
-            meterGain = 1;
-            startUp = 1.0f;
-            active = 1.0f;
-            recovery = 1.0f;
-            hitFrames = 1.0f;
-            blockFrames = 1.0f;
-        }
-    }
-
-    //Add command grab, Supers
-    //Move Movement and possible attack commands here?
 }
