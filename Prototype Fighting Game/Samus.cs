@@ -6,233 +6,61 @@ public class Samus : Universal
 {
     CharacterController controller;
     Animator anim;
-    public Stats SamusStats = new Stats(975, 1000, 100, 4, 3, 7);
-    public Jab SamusJab = new Jab(30, 0, 70, 36, 84, 5);
+    public Stats SamusStats;
+    public Jab SamusJab;
+    Controls SamusControl;
     public GameObject SamusFB;
 
-    private int dpc;
-    private int fbc;
-    private int hkc;
-    private int suc;
-    private int pointer;
-    private int direction;
-    private int prevDirec;
-    private int size;
+    //Character stats
+    private int HP = 975;
+    private int meter = 100;
+    private int stun = 1000;
 
-    private float jump;
-    private float walk;
-    private float popCounter;
+    //Character mobility stats
+    private float speed = 4.0f;
+    private float backSpd = 3.0f ;
+    private int jumpSpd = 7;
 
-    public int HP;
-    public int Stun;
-    public int Meter;
+    //Character light punch
+    private int jabDamage = 30;
+    private int jabChip = 0;
+    private int jabStun = 70;
+    private int jabCounter = 36;
+    private int jabCounterStun = 84;
+    private int jabMeter = 5;
+
+    //Attack sets which animation to play out along with assisting in getting the proper stats of the move once damage calculations are added in.
+    private string attack;
 
     //Each array holds the input command necessary to activate a special move.
     //Might be switched to an enum instead of an array
-    int[] fb = new int[] { 2, 3, 6 };
-    int[] hk = new int[] { 2, 1, 4 };
-    int[] dp = new int[] { 6, 2, 3 };
-    int[] su = new int[] { 2, 3, 6, 2, 3, 6 };
-
-    List<int> inputList = new List<int>();
+    int[] fb = new int[] { 2, 3, 6, 0, 15, 60, 120, 15 };
+    int[] hk = new int[] { 2, 1, 4, 10, 18, 90, 150, 40 };
+    int[] dp = new int[] { 6, 2, 3, 0, 18, 120, 150, 50 };
+    int[] su = new int[] { 2, 3, 6, 2, 3, 6, 0, 15, 340 };
 
     // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        SamusStats = new Stats(HP, stun, meter);
+        SamusControl = new Controls(speed, backSpd, jumpSpd,
+                                    jabDamage, jabChip, jabStun, jabCounter, jabCounterStun, jabMeter);
 
-        popCounter = 0.2f;
-        inputList.Add(0);
-        size = inputList.Count;
-        HP = SamusStats.getHP();
-        Stun = 0;
-        Meter = 0;
-
-        dpc = 0;
-        fbc = 0;
-        hkc = 0;
-        suc = 0;
-        pointer = 0;
+        attack = "None";
     }
 
     // Update is called once per frame
     void Update()
     {
-        Movement();
-        Attack();
-    }
-
-    public void Movement()
-    {
-        //Sets the directional inputs to an interger value
-        if (Input.GetAxisRaw("Vertical") > 0 && Input.GetAxisRaw("Horizontal") > 0)
+        //Movement();
+        SamusControl.Movement(controller, anim);
+        attack = SamusControl.Attack(anim, attack, dp, fb, hk, su);
+        if (attack.Equals("fireball"))
         {
-            prevDirec = direction;
-            direction = 9;
-        }
-        else if (Input.GetAxisRaw("Vertical") > 0 && Input.GetAxisRaw("Horizontal") < 0)
-        {
-            prevDirec = direction;
-            direction = 7;
-        }
-        else if (Input.GetAxisRaw("Vertical") < 0 && Input.GetAxisRaw("Horizontal") > 0)
-        {
-            prevDirec = direction;
-            direction = 3;
-        }
-        else if (Input.GetAxisRaw("Vertical") < 0 && Input.GetAxisRaw("Horizontal") < 0)
-        {
-            prevDirec = direction;
-            direction = 1;
-        }
-        else if (Input.GetAxisRaw("Vertical") > 0)
-        {
-            prevDirec = direction;
-            direction = 8;
-        }
-        else if (Input.GetAxisRaw("Vertical") < 0)
-        {
-            prevDirec = direction;
-            direction = 2;
-        }
-        else if (Input.GetAxisRaw("Horizontal") > 0)
-        {
-            prevDirec = direction;
-            direction = 6;
-        }
-        else if (Input.GetAxisRaw("Horizontal") < 0)
-        {
-            prevDirec = direction;
-            direction = 4;
-        }
-        else
-        {
-            prevDirec = direction;
-            direction = 0;
-        }
-
-        if (controller.isGrounded && Input.GetAxisRaw("Vertical") > 0)
-        {
-            jump = SamusStats.getJumpSpeed();
-        }
-
-        if (Input.GetAxisRaw("Horizontal") < 0)
-        {
-            SamusStats.setBlocking(true);
-        }
-        else
-        {
-            SamusStats.setBlocking(false);
-        }
-
-        if (controller.isGrounded && Input.GetAxisRaw("Vertical") < 0)
-        {
-            SamusStats.setCrouching(true);
-        }
-        else
-        {
-            SamusStats.setCrouching(false);
-        }
-
-        walk = Input.GetAxis("Horizontal") * SamusStats.getSpeed();
-        jump += Physics.gravity.y * Time.deltaTime;
-        Vector3 speed = new Vector3(walk, jump, 0);
-        controller.Move(speed * Time.deltaTime);
-
-        AddToInput();
-
-        //Removes the first item in the list after a set amount of time
-        popCounter -= Time.deltaTime;
-        if (popCounter <= 0)
-        {
-            if (size > 0)
-            {
-                inputList.RemoveAt(0);
-            }
-            popCounter = 0.2f;
-        }
-
-        anim.SetFloat("Speed", walk);
-    }
-
-    //Adds the directional input into a list
-    void AddToInput()
-    {
-        size = inputList.Count;
-
-        if (size > 0)
-        {
-            if (inputList[size - 1] != direction)
-            {
-                inputList.Add(prevDirec);
-                inputList.Add(direction);
-            }
-        }
-        else
-        {
-            inputList.Add(direction);
-        }
-    }
-
-    public void Attack()
-    {
-        //Throw command
-        if (Input.GetKeyDown(KeyCode.Joystick1Button0) && Input.GetKeyDown(KeyCode.Joystick1Button1))
-        {
-            //This was set to quickly reset the booleans
-
-            //Start animation for throw
-        }
-        //Jab command
-        else if (Input.GetKeyDown(KeyCode.Joystick1Button0))
-        {
-            InputPunchCommands();
-
-            //resets the pointers
-            dpc = 0;
-            fbc = 0;
-            pointer = 0;
-        }
-        //Light kick command
-        else if (Input.GetKeyDown(KeyCode.Joystick1Button1))
-        {
-            //InputKickCommands();
-        }
-        //Possible inclusion. After attack automatically clear the list but might not be a necessary inclusion though.
-    }
-
-    //Checks the inputs before determining which attack animation to play
-    void InputPunchCommands()
-    {
-        if (inputList[pointer] == dp[dpc])
-        {
-            dpc++;
-        }
-        if (inputList[pointer] == fb[fbc])
-        {
-            fbc++;
-        }
-
-        pointer++;
-
-        if (dpc == 3)
-        {
-            return;
-        }
-        else if (fbc == 3)
-        {
-            anim.SetTrigger("FBMotion");
             Shoot();
-            return;
         }
-        else if (pointer >= size)
-        {
-            anim.SetTrigger("Jab");
-            return;
-        }
-
-        InputPunchCommands();
     }
 
     //Creates a shpere which is the characters fireball
@@ -241,6 +69,7 @@ public class Samus : Universal
         GameObject FireBall = (GameObject)Instantiate(SamusFB, this.transform.position + this.transform.forward + this.transform.up, this.transform.rotation);
         Rigidbody rb = FireBall.GetComponent<Rigidbody>();
         rb.AddForce(this.transform.forward * 5, ForceMode.Impulse);
+        attack = "None";
     }
 
     //Hit detection for the player's attack
@@ -250,7 +79,7 @@ public class Samus : Universal
 
         if (opponent.name == "Opponent")
         {
-            Debug.Log("Hit the opponent");
+            Debug.Log(attack);
         }
     }
 }
