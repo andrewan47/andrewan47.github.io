@@ -6,15 +6,12 @@ public class Samus : Universal
 {
     CharacterController controller;
     Animator anim;
-    public Stats SamusStats;
-    public Jab SamusJab;
-    Controls SamusControl;
     public GameObject SamusFB;
 
     //Character stats
-    private int HP = 975;
-    private int meter = 100;
-    private int stun = 1000;
+    private int maxHP = 975;
+    private int maxMeter = 100;
+    private int maxStun = 1000;
 
     //Character mobility stats
     private float speed = 4.0f;
@@ -28,9 +25,19 @@ public class Samus : Universal
     private int jabCounter = 36;
     private int jabCounterStun = 84;
     private int jabMeter = 5;
+    private int jabWhiff = 0;
+
+    //Character fireball stats
+    private int fbDamage = 60;
+    private int fbChip = 10;
+    private int fbStun = 120;
+    private int fbCounter = 66;
+    private int fbCounterStun = 134;
+    private int fbMeter = 15;
+    private int fbWhiff = 10;
 
     //Attack sets which animation to play out along with assisting in getting the proper stats of the move once damage calculations are added in.
-    private string attack;
+    public string attack;
 
     //Each array holds the input command necessary to activate a special move.
     //Might be switched to an enum instead of an array
@@ -44,9 +51,7 @@ public class Samus : Universal
     {
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
-        SamusStats = new Stats(HP, stun, meter);
-        SamusControl = new Controls(speed, backSpd, jumpSpd,
-                                    jabDamage, jabChip, jabStun, jabCounter, jabCounterStun, jabMeter);
+        Stats(maxHP, maxStun, maxMeter, speed, backSpd, jumpSpd);
 
         attack = "None";
     }
@@ -55,17 +60,20 @@ public class Samus : Universal
     void Update()
     {
         //Movement();
-        SamusControl.Movement(controller, anim);
-        attack = SamusControl.Attack(anim, attack, dp, fb, hk, su);
+        Movement(controller, anim);
+        attack = Attack(anim, attack, dp, fb, hk, su);
         if (attack.Equals("fireball"))
         {
             Shoot();
         }
+        Meterbar.setMeterBarValue(getMeter(), maxMeter);
     }
 
     //Creates a shpere which is the characters fireball
     public void Shoot()
     {
+        var fb = new Fireball();
+        fb.FBStats(fbDamage, fbStun, fbMeter);
         GameObject FireBall = (GameObject)Instantiate(SamusFB, this.transform.position + this.transform.forward + this.transform.up, this.transform.rotation);
         Rigidbody rb = FireBall.GetComponent<Rigidbody>();
         rb.AddForce(this.transform.forward * 5, ForceMode.Impulse);
@@ -77,9 +85,25 @@ public class Samus : Universal
     {
         GameObject opponent = collision.gameObject;
 
+        Universal opponentHealth = opponent.GetComponent<Universal>();
+
         if (opponent.name == "Opponent")
         {
-            Debug.Log(attack);
+            //Switch case to determine which attack and damage variables to call.
+            switch (attack)
+            {
+                case "Jab":
+                    opponentHealth.calculateDamage(jabDamage);
+                    opponentHealth.calculateStun(jabStun);
+                    calculateMeter(jabMeter);
+                    break;
+                case "grab":
+                    Debug.Log(attack);
+                    break;
+                default:
+                    break;
+            }
+
         }
     }
 }
