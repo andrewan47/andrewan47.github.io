@@ -16,7 +16,7 @@ public class Healthbar : MonoBehaviour
     public static void setHealthBarValue(int hp, int max)
     {
         float bar = (float)hp / max;
-        Debug.Log(bar);
+        //Debug.Log(bar);
         HealthBarImage.fillAmount = bar;
     }
 }
