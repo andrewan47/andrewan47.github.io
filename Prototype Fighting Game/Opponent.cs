@@ -12,6 +12,8 @@ public class Opponent : Universal
     public int meter;
     public int stun;
 
+    public bool hitStun;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +27,7 @@ public class Opponent : Universal
     {
         HP = getHP();
         stun = getStun();
+        hitStun = getHitStun();
         Healthbar.setHealthBarValue(HP, maxHP);
     }
 }
