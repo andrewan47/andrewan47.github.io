@@ -16,7 +16,7 @@ public class Meterbar : MonoBehaviour
     public static void setMeterBarValue(int meter, int max)
     {
         float bar = (float)meter / max;
-        Debug.Log(bar);
+        //Debug.Log(bar);
         MeterBarImage.fillAmount = bar;
     }
 }
