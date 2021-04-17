@@ -10,6 +10,7 @@ public class Universal : MonoBehaviour
     private int currentHP;
     private int currentStun;
     private int currentMeter;
+    private int comboCount;
     private float spd;
     private float backSpeed;
     private int jumpSpeed;
@@ -21,6 +22,7 @@ public class Universal : MonoBehaviour
     private float walk;
     private bool isBlocking;
     private bool isCrouching;
+    private bool isStun;
 
     public void Stats(int hp, int stun, int meter, float spd, float backSpeed, int jumpSpeed)
     {
@@ -30,12 +32,14 @@ public class Universal : MonoBehaviour
         currentHP = hp;
         currentStun = 0;
         currentMeter = 0;
+        comboCount = 0;
         this.spd = spd;
         this.backSpeed = backSpeed;
         this.jumpSpeed = jumpSpeed;
         popCounter = 0.2f;
         setPrevDirec(0);
         inputList.Add(0);
+        isStun = false;
     }
 
     public void Movement(CharacterController controller, Animator anim)
@@ -211,7 +215,41 @@ public class Universal : MonoBehaviour
         {
             input = 10;
             //InputKickCommands();
-            attack = "kick";
+            attack = "Kick";
+
+            anim.SetTrigger(attack);
+        }
+        //Medium Punch
+        else if (Input.GetKeyDown(KeyCode.JoystickButton3))
+        {
+            //input
+            attack = "MP";
+
+            anim.SetTrigger(attack);
+        }
+        //Medium Kick
+        else if (Input.GetKeyDown(KeyCode.JoystickButton2))
+        {
+            //input
+            attack = "MK";
+
+            anim.SetTrigger(attack);
+        }
+        //Heavy Punch
+        else if (Input.GetKeyDown(KeyCode.JoystickButton5))
+        {
+            //input
+            attack = "HP";
+
+            anim.SetTrigger(attack);
+        }
+        //Heavy Kick
+        else if (Input.GetKeyDown(KeyCode.JoystickButton7))
+        {
+            //input
+            attack = "HK";
+
+            anim.SetTrigger(attack);
         }
 
         return attack;
@@ -332,9 +370,33 @@ public class Universal : MonoBehaviour
         return currentMeter;
     }
 
-    public void calculateDamage(int attack)
+    public bool getHitStun()
+    {
+        return isStun;
+    }
+
+    public int getCombo()
+    {
+        return comboCount;
+    }    
+
+    public void calculateCombo(bool isCombo)
+    {
+        if(isCombo)
+        {
+            comboCount++;
+        }
+        else
+        {
+            comboCount = 1;
+        }
+    }
+
+    public void calculateDamage(int attack, int time)
     {
         currentHP -= attack;
+        isStun = true;
+        StartCoroutine(StunDuration(time));
     }
 
     public void calculateStun(int value)
@@ -345,5 +407,11 @@ public class Universal : MonoBehaviour
     public void calculateMeter(int value)
     {
         currentMeter += value;
+    }
+
+    private IEnumerator StunDuration(int time)
+    {
+        yield return new WaitForSeconds(time);
+        isStun = false;
     }
 }
