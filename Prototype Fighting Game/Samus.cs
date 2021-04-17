@@ -7,6 +7,7 @@ public class Samus : Universal
     CharacterController controller;
     Animator anim;
     public GameObject SamusFB;
+    public int Combo;
 
     //Character stats
     private int maxHP = 975;
@@ -24,17 +25,59 @@ public class Samus : Universal
     private int jabStun = 70;
     private int jabCounter = 36;
     private int jabCounterStun = 84;
-    private int jabMeter = 5;
+    private int jabMeter = 20;
     private int jabWhiff = 0;
+    private int jabOnHit = 14;
 
-    //Character fireball stats
-    private int fbDamage = 60;
-    private int fbChip = 10;
-    private int fbStun = 120;
-    private int fbCounter = 66;
-    private int fbCounterStun = 134;
-    private int fbMeter = 15;
-    private int fbWhiff = 10;
+    //Character medium punch
+    private int MPDamage = 60;
+    private int MPChip = 0;
+    private int MPStun = 100;
+    private int MPCounter = 66;
+    private int MPCounterStun = 114;
+    private int MPMeter = 30;
+    private int MPWhiff = 0;
+    private int MPOnHit = 23;
+
+    //Character hard punch
+    private int HPDamage = 80;
+    private int HPChip = 0;
+    private int HPStun = 150;
+    private int HPCounter = 86;
+    private int HPCounterStun = 164;
+    private int HPMeter = 50;
+    private int HPWhiff = 0;
+    private int HPOnHit = 26;
+
+    //Character light kick
+    private int kickDamage = 40;
+    private int kickChip = 0;
+    private int kickStun = 70;
+    private int kickCounter = 46;
+    private int kickCounterStun = 84;
+    private int kickMeter = 20;
+    private int kickWhiff = 0;
+    private int kickOnHit = 15;
+
+    //Character medium kick
+    private int MKDamage = 60;
+    private int MKChip = 0;
+    private int MKStun = 100;
+    private int MKCounter = 66;
+    private int MKCounterStun = 114;
+    private int MKMeter = 30;
+    private int MKWhiff = 0;
+    private int MKOnHit = 20;
+
+    //Character hard kick
+    private int HKDamage = 80;
+    private int HKChip = 0;
+    private int HKStun = 150;
+    private int HKCounter = 86;
+    private int HKCounterStun = 164;
+    private int HKMeter = 50;
+    private int HKWhiff = 0;
+    private int HKOnHit = 26;
 
     //Attack sets which animation to play out along with assisting in getting the proper stats of the move once damage calculations are added in.
     public string attack;
@@ -54,12 +97,13 @@ public class Samus : Universal
         Stats(maxHP, maxStun, maxMeter, speed, backSpd, jumpSpd);
 
         attack = "None";
+        Combo = getCombo();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Movement();
+        Combo = getCombo();
         Movement(controller, anim);
         attack = Attack(anim, attack, dp, fb, hk, su);
         if (attack.Equals("fireball"))
@@ -72,8 +116,7 @@ public class Samus : Universal
     //Creates a shpere which is the characters fireball
     public void Shoot()
     {
-        var fb = new Fireball();
-        fb.FBStats(fbDamage, fbStun, fbMeter);
+        calculateCombo(false);
         GameObject FireBall = (GameObject)Instantiate(SamusFB, this.transform.position + this.transform.forward + this.transform.up, this.transform.rotation);
         Rigidbody rb = FireBall.GetComponent<Rigidbody>();
         rb.AddForce(this.transform.forward * 5, ForceMode.Impulse);
@@ -93,9 +136,40 @@ public class Samus : Universal
             switch (attack)
             {
                 case "Jab":
-                    opponentHealth.calculateDamage(jabDamage);
+                    calculateCombo(opponentHealth.getHitStun());
+                    opponentHealth.calculateDamage(jabDamage, jabOnHit);
                     opponentHealth.calculateStun(jabStun);
                     calculateMeter(jabMeter);
+                    break;
+                case "MP":
+                    calculateCombo(opponentHealth.getHitStun());
+                    opponentHealth.calculateDamage(MPDamage, MPOnHit);
+                    opponentHealth.calculateStun(MPStun);
+                    calculateMeter(MPMeter);
+                    break;
+                case "HP":
+                    calculateCombo(opponentHealth.getHitStun());
+                    opponentHealth.calculateDamage(HPDamage, HPOnHit);
+                    opponentHealth.calculateStun(HPStun);
+                    calculateMeter(HPMeter);
+                    break;
+                case "Kick":
+                    calculateCombo(opponentHealth.getHitStun());
+                    opponentHealth.calculateDamage(kickDamage, kickOnHit);
+                    opponentHealth.calculateStun(kickStun);
+                    calculateMeter(kickMeter);
+                    break;
+                case "MK":
+                    calculateCombo(opponentHealth.getHitStun());
+                    opponentHealth.calculateDamage(MKDamage, MKOnHit);
+                    opponentHealth.calculateStun(MKStun);
+                    calculateMeter(MKMeter);
+                    break;
+                case "HK":
+                    calculateCombo(opponentHealth.getHitStun());
+                    opponentHealth.calculateDamage(HKDamage, HKOnHit);
+                    opponentHealth.calculateStun(HKStun);
+                    calculateMeter(HKMeter);
                     break;
                 case "grab":
                     Debug.Log(attack);
