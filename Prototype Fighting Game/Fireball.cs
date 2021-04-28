@@ -22,8 +22,8 @@ public class Fireball : MonoBehaviour
 
         if (opponent.name == "Opponent")
         {
-            Debug.Log(damage);
-            opponentHealth.calculateDamage(damage, onHit);
+            opponentHealth.calculateCombo(opponentHealth.getHitStun(), onHit);
+            opponentHealth.calculateDamage(damage);
             Destroy(gameObject);
         }
     }
