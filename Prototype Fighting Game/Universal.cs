@@ -23,6 +23,7 @@ public class Universal : MonoBehaviour
     private bool isBlocking;
     private bool isCrouching;
     private bool isStun;
+    public bool isAttacking;
 
     public void Stats(int hp, int stun, int meter, float spd, float backSpeed, int jumpSpeed)
     {
@@ -40,6 +41,7 @@ public class Universal : MonoBehaviour
         setPrevDirec(0);
         inputList.Add(0);
         isStun = false;
+        isAttacking = false;
     }
 
     public void Movement(CharacterController controller, Animator anim)
@@ -137,7 +139,7 @@ public class Universal : MonoBehaviour
 
     public float getSpeed(bool isCrouching, bool isBlocking)
     {
-        if (isCrouching)
+        if (isCrouching || isAttacking)
         {
             return 0.0f;
         }
@@ -153,7 +155,14 @@ public class Universal : MonoBehaviour
 
     public int getJumpSpeed()
     {
-        return jumpSpeed;
+        if (!isAttacking)
+        {
+            return jumpSpeed;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     //Adds the directional input into a list
@@ -175,7 +184,7 @@ public class Universal : MonoBehaviour
         }
     }
 
-    public string Attack(Animator anim, string attack, int[] special1, int[] special2, int[] special3, int[] super)
+    public string Attack(Animator anim, string attack, int[] special1, int[] special2, int[] special3, int[] super, int LPA, int MPA, int HPA, int LKA, int MKA, int HKA)
     {
         int input = 0;
         int sp1 = 0;
@@ -207,6 +216,7 @@ public class Universal : MonoBehaviour
             }
             else
             {
+                StartCoroutine(AttackDuration(LPA));
                 anim.SetTrigger(attack);
             }
         }
@@ -217,6 +227,7 @@ public class Universal : MonoBehaviour
             //InputKickCommands();
             attack = "Kick";
 
+            StartCoroutine(AttackDuration(LKA));
             anim.SetTrigger(attack);
         }
         //Medium Punch
@@ -225,6 +236,7 @@ public class Universal : MonoBehaviour
             //input
             attack = "MP";
 
+            StartCoroutine(AttackDuration(MPA));
             anim.SetTrigger(attack);
         }
         //Medium Kick
@@ -233,6 +245,7 @@ public class Universal : MonoBehaviour
             //input
             attack = "MK";
 
+            StartCoroutine(AttackDuration(MKA));
             anim.SetTrigger(attack);
         }
         //Heavy Punch
@@ -241,6 +254,7 @@ public class Universal : MonoBehaviour
             //input
             attack = "HP";
 
+            StartCoroutine(AttackDuration(HPA));
             anim.SetTrigger(attack);
         }
         //Heavy Kick
@@ -249,6 +263,7 @@ public class Universal : MonoBehaviour
             //input
             attack = "HK";
 
+            StartCoroutine(AttackDuration(HKA));
             anim.SetTrigger(attack);
         }
 
@@ -416,6 +431,13 @@ public class Universal : MonoBehaviour
         yield return new WaitForSeconds(time);
         isStun = false;
         comboCount = 0;
+    }
+
+    private IEnumerator AttackDuration(int time)
+    {
+        isAttacking = true;
+        yield return new WaitForSeconds(time);
+        isAttacking = false;
     }
 
     public void OnDisable()
