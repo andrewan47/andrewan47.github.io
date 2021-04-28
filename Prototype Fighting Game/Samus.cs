@@ -28,6 +28,7 @@ public class Samus : Universal
     private int jabMeter = 20;
     private int jabWhiff = 0;
     private int jabOnHit = 60;
+    private int jabAtk = 15;
     //OnHit = 14
 
     //Character medium punch
@@ -39,6 +40,7 @@ public class Samus : Universal
     private int MPMeter = 30;
     private int MPWhiff = 0;
     private int MPOnHit = 23;
+    private int MPAtk = 23;
 
     //Character hard punch
     private int HPDamage = 80;
@@ -49,6 +51,7 @@ public class Samus : Universal
     private int HPMeter = 50;
     private int HPWhiff = 0;
     private int HPOnHit = 26;
+    private int HPAtk = 34;
 
     //Character light kick
     private int kickDamage = 40;
@@ -59,6 +62,7 @@ public class Samus : Universal
     private int kickMeter = 20;
     private int kickWhiff = 0;
     private int kickOnHit = 5;
+    private int kickAtk = 18;
     //OnHit = 15
 
     //Character medium kick
@@ -70,6 +74,7 @@ public class Samus : Universal
     private int MKMeter = 30;
     private int MKWhiff = 0;
     private int MKOnHit = 20;
+    private int MKAtk = 25;
 
     //Character hard kick
     private int HKDamage = 80;
@@ -80,6 +85,7 @@ public class Samus : Universal
     private int HKMeter = 50;
     private int HKWhiff = 0;
     private int HKOnHit = 26;
+    private int HKAtk = 37;
 
     //Attack sets which animation to play out along with assisting in getting the proper stats of the move once damage calculations are added in.
     public string attack;
@@ -107,11 +113,12 @@ public class Samus : Universal
     {
         Combo = getCombo();
         Movement(controller, anim);
-        attack = Attack(anim, attack, dp, fb, hk, su);
+        attack = Attack(anim, attack, dp, fb, hk, su, jabAtk, MPAtk, HPAtk, kickAtk, MKAtk, HKAtk);
         if (attack.Equals("fireball"))
         {
             Shoot();
         }
+     
         Meterbar.setMeterBarValue(getMeter(), maxMeter);
     }
 
