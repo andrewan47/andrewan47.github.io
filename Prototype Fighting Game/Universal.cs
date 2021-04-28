@@ -380,23 +380,25 @@ public class Universal : MonoBehaviour
         return comboCount;
     }    
 
-    public void calculateCombo(bool isCombo)
+    public void calculateCombo(bool isCombo, int time)
     {
         if(isCombo)
         {
+            OnDisable();
             comboCount++;
+            StartCoroutine(StunDuration(time));
         }
         else
         {
             comboCount = 1;
+            StartCoroutine(StunDuration(time));
         }
     }
 
-    public void calculateDamage(int attack, int time)
+    public void calculateDamage(int attack)
     {
         currentHP -= attack;
         isStun = true;
-        StartCoroutine(StunDuration(time));
     }
 
     public void calculateStun(int value)
@@ -413,5 +415,11 @@ public class Universal : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         isStun = false;
+        comboCount = 0;
+    }
+
+    public void OnDisable()
+    {
+        StopAllCoroutines();
     }
 }
