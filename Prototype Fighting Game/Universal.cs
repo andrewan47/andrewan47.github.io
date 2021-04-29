@@ -214,7 +214,7 @@ public class Universal : MonoBehaviour
             {
                 return attack;
             }
-            else
+            else if (!isAttacking)
             {
                 StartCoroutine(AttackDuration(LPA));
                 anim.SetTrigger(attack);
@@ -227,8 +227,11 @@ public class Universal : MonoBehaviour
             //InputKickCommands();
             attack = "Kick";
 
-            StartCoroutine(AttackDuration(LKA));
-            anim.SetTrigger(attack);
+            if (!isAttacking)
+            {
+                StartCoroutine(AttackDuration(LKA));
+                anim.SetTrigger(attack);
+            }
         }
         //Medium Punch
         else if (Input.GetKeyDown(KeyCode.JoystickButton3))
@@ -236,8 +239,11 @@ public class Universal : MonoBehaviour
             //input
             attack = "MP";
 
-            StartCoroutine(AttackDuration(MPA));
-            anim.SetTrigger(attack);
+            if (!isAttacking)
+            {
+                StartCoroutine(AttackDuration(MPA));
+                anim.SetTrigger(attack);
+            }
         }
         //Medium Kick
         else if (Input.GetKeyDown(KeyCode.JoystickButton2))
@@ -245,8 +251,11 @@ public class Universal : MonoBehaviour
             //input
             attack = "MK";
 
-            StartCoroutine(AttackDuration(MKA));
-            anim.SetTrigger(attack);
+            if (!isAttacking)
+            {
+                StartCoroutine(AttackDuration(MKA));
+                anim.SetTrigger(attack);
+            }
         }
         //Heavy Punch
         else if (Input.GetKeyDown(KeyCode.JoystickButton5))
@@ -254,8 +263,11 @@ public class Universal : MonoBehaviour
             //input
             attack = "HP";
 
-            StartCoroutine(AttackDuration(HPA));
-            anim.SetTrigger(attack);
+            if (!isAttacking)
+            {
+                StartCoroutine(AttackDuration(HPA));
+                anim.SetTrigger(attack);
+            }
         }
         //Heavy Kick
         else if (Input.GetKeyDown(KeyCode.JoystickButton7))
@@ -263,8 +275,11 @@ public class Universal : MonoBehaviour
             //input
             attack = "HK";
 
-            StartCoroutine(AttackDuration(HKA));
-            anim.SetTrigger(attack);
+            if (!isAttacking)
+            {
+                StartCoroutine(AttackDuration(HKA));
+                anim.SetTrigger(attack);
+            }
         }
 
         return attack;
